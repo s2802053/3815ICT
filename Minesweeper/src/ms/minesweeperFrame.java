@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 package ms;
+import java.awt.Container;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
@@ -18,15 +22,26 @@ public class minesweeperFrame extends javax.swing.JFrame {
         initComponents();
         setSize(300, 300);
         
-        /*int count = 0;
-        for (int[] row : tile.neighbours){
-            if (row != null){
-                System.out.println(count + " X: " + row[0] + ", Y: " + row[1]);
-                System.out.println("\n");
-                count++;
+        Container pane = getContentPane();
+        pane.setLayout(new GridLayout(10, 10));
+        for (int i = 0; i < 100; i++) {
+            JButton button = new JButton(Integer.toString(i + 1));
+            pane.add(button);
+        }
+        
+        
+        /*SquareMinesweeperGame test = new SquareMinesweeperGame(10, 3);
+        for (int i = 0; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                SquareMinesweeperTile t = test.tileAtCoord(i, j);
+                if (t.isBomb){
+                    System.out.println("Bomb found at X: " + t.x + " Y: " + t.y);
+                }
             }
         }*/
     }
+    
+    
     
 
     /**
@@ -38,13 +53,8 @@ public class minesweeperFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Minesweeper");
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
         setLocationRelativeTo(null);
@@ -86,6 +96,5 @@ public class minesweeperFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

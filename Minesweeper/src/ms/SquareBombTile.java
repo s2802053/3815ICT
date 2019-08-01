@@ -14,9 +14,4 @@ public class SquareBombTile extends SquareMinesweeperTile {
         super(x, y);
         this.isBomb = true;
     }
-    public void reveal(){
-        this.isRevealed = true;
-        // display bomb
-        // end game
-    }
 }
