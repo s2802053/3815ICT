@@ -17,7 +17,17 @@ public class minesweeperFrame extends javax.swing.JFrame {
     public minesweeperFrame() {
         initComponents();
         setSize(300, 300);
+        
+        /*int count = 0;
+        for (int[] row : tile.neighbours){
+            if (row != null){
+                System.out.println(count + " X: " + row[0] + ", Y: " + row[1]);
+                System.out.println("\n");
+                count++;
+            }
+        }*/
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
