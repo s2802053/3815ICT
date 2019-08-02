@@ -21,6 +21,14 @@ public class SquareMinesweeperTile {
         return this.isBomb;
     }
     
+    public Boolean isRevealed(){
+        return this.isRevealed;
+    }
+    
+    public int adjacentBombs(){
+        return this.adjacentBombs;
+    }
+    
     public void setAdjacentBombs(int i){
         this.adjacentBombs = i;
     }

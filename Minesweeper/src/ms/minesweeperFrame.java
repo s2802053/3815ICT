@@ -22,12 +22,19 @@ public class minesweeperFrame extends javax.swing.JFrame {
         initComponents();
         setSize(300, 300);
         
-        Container pane = getContentPane();
+        SquareMinesweeperGame test = new SquareMinesweeperGame(10, 10);
+        test.makeMove(0, 0);
+        test.makeMove(9, 9);
+        test.drawToConsole();
+        
+        
+        
+        /*Container pane = getContentPane();
         pane.setLayout(new GridLayout(10, 10));
         for (int i = 0; i < 100; i++) {
             JButton button = new JButton(Integer.toString(i + 1));
             pane.add(button);
-        }
+        }*/
         
         
         /*SquareMinesweeperGame test = new SquareMinesweeperGame(10, 3);
