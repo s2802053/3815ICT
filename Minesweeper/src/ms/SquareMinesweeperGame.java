@@ -5,14 +5,15 @@
  */
 package ms;
 import java.util.Random;
+import java.util.Observable;
 
 /**
  *
  * @author jburt
  */
-public class SquareMinesweeperGame {
+public class SquareMinesweeperGame extends Observable { 
     // controller class for Minesweeper game
-    private SquareMinesweeperTile[][] gridContainer;
+    public SquareMinesweeperTile[][] gridContainer;
     private Boolean isWon;
     private Boolean isLost;
     private int gridSize;
@@ -96,6 +97,11 @@ public class SquareMinesweeperGame {
         // reveal the tile at location x, y
         // any further actions will be conducted
         revealInitialTile(x, y);
+        setChanged();
+        notifyObservers();
+        
+        
+        
         if (!isLost){
             // if the game was not lost on the previous move
             // check if the win condition has been met
@@ -257,16 +263,8 @@ public class SquareMinesweeperGame {
             }
         }
         for (int i = 0; i < gridSize; i++){
-            String line = String.join("", outp[i]);
+            String line = String.join(" ", outp[i]);
             System.out.println(line);
         }
     }
 }   
-/*
-Win condition - all non-bomb tiles are revealed
-Lose condition - a bomb tile is revealed
-
-check for win condition each time tile is revealed
-
-
-*/

@@ -1,0 +1,5 @@
+<map id="ms.SquareMinesweeperTile" name="ms.SquareMinesweeperTile">
+<area shape="rect" id="node1" title=" " alt="" coords="71,5,252,229"/>
+<area shape="rect" id="node2" href="$classms_1_1_square_bomb_tile.html" title=" " alt="" coords="5,285,144,362"/>
+<area shape="rect" id="node3" href="$classms_1_1_square_non_bomb_tile.html" title=" " alt="" coords="168,277,331,369"/>
+</map>

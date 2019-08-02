@@ -8,47 +8,72 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import java.util.*;
 
 /**
  *
  * @author jburt
  */
-public class minesweeperFrame extends javax.swing.JFrame {
+public class minesweeperFrame extends javax.swing.JFrame implements Observer {
 
     /**
      * Creates new form minesweeperFrame
      */
+    
+    
+    
+    private SquareMinesweeperGame testGame;
+    private JButton[][] grid;
     public minesweeperFrame() {
         initComponents();
-        setSize(300, 300);
+        setSize(600, 600);
         
-        SquareMinesweeperGame test = new SquareMinesweeperGame(10, 10);
-        test.makeMove(0, 0);
-        test.makeMove(9, 9);
-        test.drawToConsole();
-        
-        
-        
-        /*Container pane = getContentPane();
-        pane.setLayout(new GridLayout(10, 10));
-        for (int i = 0; i < 100; i++) {
-            JButton button = new JButton(Integer.toString(i + 1));
-            pane.add(button);
-        }*/
-        
-        
-        /*SquareMinesweeperGame test = new SquareMinesweeperGame(10, 3);
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < 10; j++){
-                SquareMinesweeperTile t = test.tileAtCoord(i, j);
-                if (t.isBomb){
-                    System.out.println("Bomb found at X: " + t.x + " Y: " + t.y);
-                }
-            }
-        }*/
+        testGame = new SquareMinesweeperGame(10, 10);
+        grid = drawButtonGrid(10);
+                
+        testGame.addObserver(this);                        
     }
     
+    private JButton[][] drawButtonGrid(int gridSize){
+        this.setLayout(new GridLayout(gridSize, gridSize));
+        
+        JButton[][] grid = new JButton[gridSize][gridSize];
+        for (int y = 0; y < gridSize; y++){
+            for (int x = 0; x < gridSize; x++){
+                JButton button = new JButton(); 
+                this.add(button);
+                button.setText("#");
+                button.addActionListener(new ClickHandler(x, y, testGame));
+                grid[y][x] = button;
+            }
+        }
+        return grid;
+    }
     
+    public void update(Observable obj, Object arg){
+        // game has been updated
+        // retrieve the updated grid
+        // update the view accordingly
+        for(int y = 0; y < 10; y++){
+            for (int x = 0; x < 10; x++){
+                if (grid[y][x]!=null){
+                    SquareMinesweeperTile tile = testGame.tileAtCoord(x, y);
+                    if (!tile.isRevealed()){
+                        // set to #
+                        grid[y][x].setText("#");
+                    } else {
+                        if (tile.isBomb()){
+                            // set to B
+                            grid[y][x].setText("B");
+                        } else {
+                            // set to adjacent bomb count
+                            grid[y][x].setText(Integer.toString(tile.adjacentBombs()));
+                        }
+                    }
+                }
+            }
+        }
+    }
     
 
     /**
