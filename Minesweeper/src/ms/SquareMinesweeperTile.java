@@ -33,6 +33,10 @@ public class SquareMinesweeperTile {
         this.adjacentBombs = i;
     }
     
+    public void increaseAdjacentBombs(){
+        this.adjacentBombs++;
+    }
+    
     public int[][] neighbours(){
         boolean topRow = this.y < 1;
         boolean bottomRow = this.y == 9;
