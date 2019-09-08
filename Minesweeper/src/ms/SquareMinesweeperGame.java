@@ -12,8 +12,10 @@ import java.util.Observable;
  * @author jburt
  */
 public class SquareMinesweeperGame extends Observable { 
-    // controller class for Minesweeper game
+    
+// controller class for Minesweeper game
     public SquareMinesweeperTile[][] gridContainer;
+    private SquareMinesweeperTile[] bombLocations;
     private Boolean isWon;
     private Boolean isLost;
     private int gridSize;
@@ -24,19 +26,25 @@ public class SquareMinesweeperGame extends Observable {
         // gridSize x gridSize to hold tiles
         SquareMinesweeperTile[][] gridContainerEmpty = new SquareMinesweeperTile[gridSize][gridSize];
         
-        // insert [nBombs] mines into the grid
+        // insert [nMines] mines into the grid
         SquareMinesweeperTile[][] gridContainerWithMines = insertMines(nMines, gridSize, gridContainerEmpty);
         
         // fill the rest of the grid with non-mines
         SquareMinesweeperTile[][] gridContainerPopulated = insertNonMines(gridSize, gridContainerWithMines);
         
-        this.gridContainer = gridContainerPopulated;   
+        this.gridContainer = gridContainerPopulated;
+        
+        // increase adjacent bomb counts of tiles next to bombs
+        setAdjacentBombs();
     }
     
     private SquareMinesweeperTile[][] insertMines(int nMines, int gridSize, SquareMinesweeperTile[][] gridContainer){
         
         // inserts [nMines] SquareBombTiles into the provided [gridContainer]
         // returns the gridContainer
+        
+        // initialise bombLocations
+        this.bombLocations = new SquareMinesweeperTile[nMines];
         
         // produce 10 random coordinate pairing
         for (int i = 0; i < nMines; i++){
@@ -59,6 +67,7 @@ public class SquareMinesweeperGame extends Observable {
                     SquareBombTile tile = new SquareBombTile(x, y);
                     // insert into grid at coordinates
                     gridContainer[y][x] = tile;
+                    this.bombLocations[i] = tile;
                     
                 }
             }
@@ -77,8 +86,23 @@ public class SquareMinesweeperGame extends Observable {
                 }
             }
         }
-        
         return gridContainer;
+    }
+    
+    private void setAdjacentBombs(){
+        for (SquareMinesweeperTile bombTile : this.bombLocations){
+            // for each bomb tile
+            // retrieve neighbour coordinates
+            int[][] neighbours = bombTile.neighbours();
+            for (int[] coord : neighbours){
+                // increase bomb count of each neighbour
+                if (coord == null){ continue; };
+                int x = coord[0];
+                int y = coord[1];
+               
+                this.gridContainer[y][x].increaseAdjacentBombs();
+            }
+        }
     }
     
     public SquareMinesweeperGame(int gridSize, int nMines){
@@ -123,40 +147,11 @@ public class SquareMinesweeperGame extends Observable {
         SquareMinesweeperTile tile = tileAtCoord(x, y);
         int type = tile.reveal();
         if (type == 0){
-            bombTileRevealed(x, y);
+            gameHasBeenLost();
             // bomb has been clicked
         } else if ( type == 1){
             subsequentTileRevealed(x, y);
         }
-    }
-    
-    // returns the number of bombs in an array of neighbour coordinates
-    private int countAdjacentBombs(int[][] neighbours){
-        int count = 0;
-        for (int[] neighbour : neighbours){
-            
-            // skip this iteration if the value is null
-            if (neighbour == null) { continue; }
-            
-            // retrieve coordinates            
-            int x = neighbour[0];
-            int y = neighbour[1];
-            
-            SquareMinesweeperTile tile = tileAtCoord(x, y);
-            
-            // increase count if bomb found
-            if (tile.isBomb() == true){
-                count++;
-            }         
-        }
-        return count;
-    }
-    
-    // called when a bomb tile is revealed
-    // should set game status to LOST
-    private void bombTileRevealed(int x, int y){
-        isLost = true;
-        gameHasBeenLost();
     }
     
     // called when a subsequent tile is revealed
@@ -170,13 +165,8 @@ public class SquareMinesweeperGame extends Observable {
         
         // retrieve list of neighbouring tiles
         SquareMinesweeperTile tile = tileAtCoord(x, y);
-        int[][] neighbours = tile.neighbours();
             
-            
-        int adjacentBombs = countAdjacentBombs(neighbours);
-        tile.setAdjacentBombs(adjacentBombs);
-            
-        if (adjacentBombs > 0){
+        if (tile.adjacentBombs() > 0){
             adjacentTileRevealed(x, y);
         } else {
             emptyTileRevealed(x, y);
